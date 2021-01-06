@@ -1,0 +1,11 @@
+# executable file
+**/bin/
+
+# jar file
+/*.jar
+
+# resources
+resources/
+
+# sqlite data
+/*.db
