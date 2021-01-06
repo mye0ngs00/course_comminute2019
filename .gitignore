@@ -2,10 +2,10 @@
 **/bin/
 
 # jar file
-/*.jar
+*.jar
 
 # resources
 resources/
 
 # sqlite data
-/*.db
+*.db
