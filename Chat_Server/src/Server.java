@@ -52,7 +52,6 @@ public class Server {
 				bw_chatSocket.write("-1");
 				bw_chatSocket.flush();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}).start();

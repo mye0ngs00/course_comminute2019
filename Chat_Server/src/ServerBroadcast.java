@@ -11,6 +11,7 @@ public class ServerBroadcast implements Runnable {
 	private BufferedWriter bw;
 	private Scanner scan;
 	private String data;
+	private String formatted_data
 	
 	// 생성자
 	public ServerBroadcast(Member member) {
@@ -19,13 +20,14 @@ public class ServerBroadcast implements Runnable {
 	}
 	
 	// 소켓에 메세지 싣기
-	public void outPutMessage(Map.Entry<Socket, String> s, String data) {
+	public void outPutMessage(Map.Entry<Socket, String> s, String msg) {
 		try {
 			bw = new BufferedWriter(new OutputStreamWriter(s.getKey().getOutputStream(), "UTF-8"));
-			bw.write(data+"\n");
+			bw.write(msg+"\n");
 			bw.flush();
 		} catch (IOException e) {
-			System.out.println("Broadcast output Exception");
+			System.out.println(e.getMessage());
+	        e.printStackTrace();
 		}
 	}
 
@@ -43,11 +45,11 @@ public class ServerBroadcast implements Runnable {
 			}
 			
 			// 서버 요청 메시지 정제
-			String formatted_data = "334A_A@server@" + this.data;
+			this.formatted_data = "334A_A@server@" + this.data;
 			
 			// 브로드캐스팅
 			for (Map.Entry<Socket, String> s : this.member.getMb().entrySet()) {
-				outPutMessage(s, formatted_data);
+				outPutMessage(s, this.formatted_data);
 			}
 		}
 	}
