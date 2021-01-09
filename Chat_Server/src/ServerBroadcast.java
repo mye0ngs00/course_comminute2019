@@ -47,7 +47,7 @@ public class ServerBroadcast implements Runnable {
 			// 서버 요청 메시지 정제
 			this.formatted_data = "334A_A@server@" + this.data;
 			
-			// 브로드캐스팅
+			// 서버 메세지 브로드캐스팅
 			for (Map.Entry<Socket, String> s : this.member.getMb().entrySet()) {
 				outPutMessage(s, this.formatted_data);
 			}

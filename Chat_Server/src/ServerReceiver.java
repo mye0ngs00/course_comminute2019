@@ -14,7 +14,7 @@ public class ServerReceiver implements Runnable {
 	private BufferedWriter bw;
 	private boolean flag = true;
 	private Socket socket;
-	private Crawler crawler = null;
+	private Crawler crawler;
 	
 	// 생성자
 	public ServerReceiver(Socket socket, Member member) {
@@ -38,7 +38,7 @@ public class ServerReceiver implements Runnable {
 	}
 
 	// 소켓에 메세지 싣기
-	public void outPutMessage(Map.Entry<Socket, String> s, String data) {
+	private void outPutMessage(Map.Entry<Socket, String> s, String data) {
 		try {
 			bw = new BufferedWriter(new OutputStreamWriter(s.getKey().getOutputStream(), "UTF-8"));
 			bw.write(data + "\n");
@@ -50,7 +50,7 @@ public class ServerReceiver implements Runnable {
 	}
 
 	// 소켓에 받은 데이터를 읽고 출력
-	public void socketReader() {
+	private void socketReader() {
 		try {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			this.data = br.readLine();
@@ -68,7 +68,7 @@ public class ServerReceiver implements Runnable {
 	}
 
 	// 소켓 종료
-	public void socketClose() {
+	private void socketClose() {
 		if (socket != null) {
 			try {
 				socket.close();
@@ -77,6 +77,18 @@ public class ServerReceiver implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	// QnA Notice
+	private void qnaNotice(BufferedWriter bw, int number) {
+		for(int i=0; i<7; i++) {
+			bw.write("help#!@" + this.crawler.getNoticeText(0, i)+"\n");
+			bw.flush();
+			bw.write("help#!@" + this.crawler.getNoticeLink(0, i)+"\n");
+			bw.flush();
+		}
+		bw.write("help#!@ㅡㅡㅡ링크를 클릭하시면 이동됩니다ㅡㅡㅡ\n");
+		bw.flush();
 	}
 
 	@Override
@@ -91,70 +103,22 @@ public class ServerReceiver implements Runnable {
 					
 					try {
 						bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-						String temp = null;
 						// 명령어 구분
 						switch(commandStr) {
 							case "공지":	
-								for(int i=0; i< 7; i++) {
-									bw.write("help#!@" + crawler.getNoticeText(0, i)+"\n");
-									bw.flush();
-									bw.write("help#!@" + crawler.getNoticeLink(0, i)+"\n");
-									bw.flush();
-								}
-								bw.write("help#!@ㅡㅡㅡ링크를 클릭하시면 이동됩니다ㅡㅡㅡ\n");
-								bw.flush();
+								qnaNotice(bw, 0);
 								break;
 							case "행사":	
-								for(int i=0; i< 7; i++) {
-									bw.write("help#!@" + crawler.getNoticeText(1, i)+"\n");
-									bw.flush();
-									bw.write("help#!@" + crawler.getNoticeLink(1, i)+"\n");
-									bw.flush();
-								}
-								bw.write("help#!@ㅡㅡㅡ링크를 클릭하시면 이동됩니다ㅡㅡㅡ\n");
-								bw.flush();
+								qnaNotice(bw, 1);
 								break;
 							case "학사":	
-								for(int i=0; i< 7; i++) {
-									bw.write("help#!@" + crawler.getNoticeText(2, i)+"\n");
-									bw.flush();
-									bw.write("help#!@" + crawler.getNoticeLink(2, i)+"\n");
-									bw.flush();
-								}
-								bw.write("help#!@ㅡㅡㅡ링크를 클릭하시면 이동됩니다ㅡㅡㅡ\n");
-								bw.flush();
+								qnaNotice(bw, 2);
 								break;
 							case "장학":
-								for(int i=0; i< 7; i++) {
-									bw.write("help#!@" + crawler.getNoticeText(3, i)+"\n");
-									bw.flush();
-									bw.write("help#!@" + crawler.getNoticeLink(3, i)+"\n");
-									bw.flush();
-								}
-								bw.write("help#!@ㅡㅡㅡ링크를 클릭하시면 이동됩니다ㅡㅡㅡ\n");
-								bw.flush();
+								qnaNotice(bw, 3);
 								break;
 							case "취업":	
-								for(int i=0; i< 7; i++) {
-									bw.write("help#!@" + crawler.getNoticeText(4, i)+"\n");
-									bw.flush();
-									bw.write("help#!@" + crawler.getNoticeLink(4, i)+"\n");
-									bw.flush();
-								}
-								bw.write("help#!@ㅡㅡㅡ링크를 클릭하시면 이동됩니다ㅡㅡㅡ\n");
-								bw.flush();
-								break;
-							case "야":
-								bw.write("help#!@네??\n");
-								break;
-							case "오":
-								bw.write("help#!@감탄사 5\n");
-								break;
-							case "음":
-								bw.write("help#!@고민하지 마세요~\n");
-								break;
-							case "ㅋ":
-								bw.write("help#!@웃기신가요!?\n");
+								qnaNotice(bw, 4);
 								break;
 							case "/help":
 								bw.write("help#!@현재 공지 / 행사 / 학사 / 장학 / 취업 만 구현했습니다. 감사합니다.\n");
