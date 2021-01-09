@@ -9,3 +9,8 @@ resources/
 
 # sqlite data
 *.db
+
+# comment files
+**/.progject
+**/.DS_Store
+**/.settings/
