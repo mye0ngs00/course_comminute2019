@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.Scanner;
 
-/* 서버가 연결된 클라이언트 전체에게 브로드캐스트 */
+/* 서버가 연결된 클라이언트 전체에게 브로드캐스트 하는 클래스 */
 public class ServerBroadcast implements Runnable {
 	private Member member;
 	private BufferedWriter bw;
