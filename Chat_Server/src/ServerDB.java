@@ -12,18 +12,19 @@ import org.mariadb.jdbc.Driver;
 
 /* 데이터베이스 설정 */
 public class ServerDB {
-	private static final String driverName = "org.mariadb.jdbc.Driver";
-	private static final String jdbcUrl="jdbc:mariadb://localhost:3307/chat?autoReconnect=true";
+	private static final String DRIVER_NAME = "org.mariadb.jdbc.Driver";
+	private static final String JDBC_URL = "jdbc:mariadb://localhost:3307/chat?autoReconnect=true";
+	private static final String USER_ID = "root";
+	private static final String USER_PW = "password";
+
 	static Connection con;
 	static Statement st;
 	static ResultSet rs;
 	
 	public ServerDB(){
 		try {
-	        Class.forName(driverName);
-            String userId="root";
-            String userPw="password";
-            Connection con = DriverManager.getConnection(jdbcUrl,userId,userPw);
+	        Class.forName(DRIVER_NAME);
+            Connection con = DriverManager.getConnection(JDBC_URL, USER_ID, USER_PW);
 	        st = con.createStatement();
 	        
 	        System.out.println("데이터베이스 연결 완료");
