@@ -11,6 +11,6 @@ resources/
 *.db
 
 # comment files
-**/.progject
-**/.DS_Store
-**/.settings/
+# **/.project
+# **/.DS_Store
+# **/.settings/
