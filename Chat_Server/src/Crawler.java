@@ -4,7 +4,7 @@ import org.jsoup.select.Elements;
 
 /* 교내 홈페이지 파싱을 위한 크롤러 */
 public class Crawler {
-	private static final String URL = "http://portal.hs.ac.kr/HsIs/index.jsp";
+	private static final String UNIV_URL = "http://portal.hs.ac.kr/HsIs/index.jsp";
 	private String[][] notice_text;
 	private String[][] notice_link;
 	
@@ -17,7 +17,7 @@ public class Crawler {
 	// 파싱
 	public void Update() {
 		try {
-			Document doc = Jsoup.connect(URL).get();
+			Document doc = Jsoup.connect(UNIV_URL).get();
 			Elements notices = doc.select("ul.recentBbsInnerUl").select("li.recentBbsInnerLi");
 
 			for(int i=0; i<notices.size(); i++) {
