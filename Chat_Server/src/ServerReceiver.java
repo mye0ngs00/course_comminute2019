@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Map;
 
-/* 수신 */
+/* 채팅 및 도우미 메시지 수신 */
 public class ServerReceiver implements Runnable {
 	private Member member;
 	private String data;

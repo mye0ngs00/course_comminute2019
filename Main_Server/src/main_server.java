@@ -20,7 +20,7 @@ public class main_server {
 	
 	private static final int portNumber = 3000;
 	
-	//jdbc connection
+	// jdbc connection
 	private static Connection con;
 	
 	public static void main(String[] args) {
@@ -34,7 +34,7 @@ public class main_server {
 			e2.printStackTrace();
 		}
 		
-		//아이디 비밀번호 소켓 쓰레드
+		// 아이디 비밀번호 소켓 쓰레드
 		new Thread(new Runnable() {
 			Socket idSocket, pwSocket, infoSocket;
 			
@@ -60,7 +60,7 @@ public class main_server {
 			}
 		}).start();
 		
-		//클라이언트에 코스 아이디 전송.
+		// 클라이언트에 코스 아이디 전송.
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

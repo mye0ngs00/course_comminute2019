@@ -39,15 +39,17 @@ public class Client extends JFrame {
 	private JButton forgotBtn;
 	private Image logo_img = null;
 	private Image login_img = null;
+	
 	//로그인 패널
 	private JPanel loginPanel;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel2;
+	
 	//로고이미지 소스코드
 	private File srcimg;
 	private File srcimg2;
 	
-	//id,pw 소켓
+	//id, pw 소켓
 	private static Socket idSocket = null;
 	private static Socket pwSocket = null;
 	private static volatile BufferedWriter id_bw;
@@ -221,7 +223,7 @@ public class Client extends JFrame {
 			
 		}
 		
-		//소켓으로 id, name, dept_name, pos를 받고 확인하여 조건문
+		// 소켓으로 id, name, dept_name, pos를 받고 확인하여 조건문
 		try {
 			receivedInfo = info_br.readLine();
 			String receivedInfo2[] = receivedInfo.split("@");
@@ -230,19 +232,19 @@ public class Client extends JFrame {
 			deptName = receivedInfo2[2];
 			pos = receivedInfo2[3];
 			
-			//로그인 실패 flag: -1
+			// 로그인 실패 flag: -1
 			if(userId.equals("-1")) {
 				new LoginFailWindow();
 				
 			}
-			//로그인 성공
+			// 로그인 성공
 			else {
-				//화면전환
+				// 화면전환
 				dispose();
 				new SelectChatWindow(userId,userName,deptName,pos);
 				System.out.println("Login Success");
 			}
-			//비밀번호 지우기
+			// 비밀번호 지우기
 			passwordField.setText("");
 		}catch (IOException e1) {
 			try {
@@ -258,7 +260,7 @@ public class Client extends JFrame {
 		
 	}
 	
-	//엔터 누르면 로그인  이벤트
+	// 엔터 누르면 로그인 이벤트
 	public class loginWithEnterAdapter extends KeyAdapter{
 		public void keyPressed(KeyEvent e) {
             if(e.getKeyCode() == KeyEvent.VK_ENTER){
