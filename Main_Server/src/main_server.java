@@ -16,8 +16,9 @@ public class main_server {
 	private static ServerSocket info_serverSocket = null;
 	private static ServerSocket lobSocket = null;
 	
-	private static Socket lobs = null; //lobby socket
+	private static Socket lobs = null;
 	
+	private static final int LOB_PORT = 4001; // 아이디 받아서 로비에 표출할 강의 전송
 	private static final int ID_PORT = 3000;
 	private static final int PW_PORT = 3001;
 	private static final int INFO_PORT = 3002;
@@ -27,7 +28,7 @@ public class main_server {
 	
 	public static void main(String[] args) {
 		try {
-			lobSocket = new ServerSocket(4001);
+			lobSocket = new ServerSocket(LOB_PORT);
 			id_serverSocket = new ServerSocket(ID_PORT); 
 			pw_serverSocket = new ServerSocket(PW_PORT);
 			info_serverSocket = new ServerSocket(INFO_PORT);
