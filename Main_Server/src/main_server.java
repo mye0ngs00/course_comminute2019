@@ -18,7 +18,9 @@ public class main_server {
 	
 	private static Socket lobs = null; //lobby socket
 	
-	private static final int portNumber = 3000;
+	private static final int ID_PORT = 3000;
+	private static final int PW_PORT = 3001;
+	private static final int INFO_PORT = 3002;
 	
 	// jdbc connection
 	private static Connection con;
@@ -26,9 +28,9 @@ public class main_server {
 	public static void main(String[] args) {
 		try {
 			lobSocket = new ServerSocket(4001);
-			id_serverSocket = new ServerSocket(portNumber); 
-			pw_serverSocket = new ServerSocket(portNumber+1);
-			info_serverSocket = new ServerSocket(portNumber+2);
+			id_serverSocket = new ServerSocket(ID_PORT); 
+			pw_serverSocket = new ServerSocket(PW_PORT);
+			info_serverSocket = new ServerSocket(INFO_PORT);
 			
 		} catch (IOException e2) {
 			e2.printStackTrace();
@@ -60,7 +62,7 @@ public class main_server {
 			}
 		}).start();
 		
-		// 클라이언트에 코스 아이디 전송.
+		// 클라이언트에 강의 아이디 전송.
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -84,7 +86,7 @@ public class main_server {
 			
 		}).start();
 		
-		//db연결
+		// db연결
 		try {
 			String driverName = "com.mysql.cj.jdbc.Driver";
 	        Class.forName(driverName);
@@ -99,9 +101,9 @@ public class main_server {
 	      }
 		
 		System.out.println("서버 실행 완료");
-	}
+	}// main
 	
-	//id에 해당하는 과목들 찾기
+	// 수강과목 일렬로 전송(%로 구분)
 	private static String findCourse(String id) {
 		String ret = "";
 		try {
@@ -114,7 +116,7 @@ public class main_server {
 		return ret;
 	}
 	
-	//id에 해당하는 정보 찾기
+	// id에 해당하는 정보 찾기
 	private static String[] findInfo(String id) {
 		String a[] = {"-1", "-1", "-1", "-1"};
 		try {
@@ -130,14 +132,14 @@ public class main_server {
 		return a;
 	}
 	
-	//로그인 메소드
+	// 로그인
 	private static boolean login(String id, String pw) {
         try {
-        	//id에 대응하는 pw가 맞는지?
         	String pwd_tmp = null;
 	        Statement stmt = con.createStatement();
 	        ResultSet rs = stmt.executeQuery("Select * from login WHERE user_id='"+ id + "';");
-	        //db cursor_idx가 0부터 시작하므로
+	        
+	        // db cursor_idx가 0부터 시작하므로
 	        while(rs.next()) pwd_tmp=(String)rs.getObject(1);
 	        if( pw.equals(pwd_tmp) ) {
 	        	rs.close();
@@ -146,18 +148,20 @@ public class main_server {
 	        }
 	        rs.close();
 	    	stmt.close();
-        }catch(Exception e) { }
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }
 		return false;
 	}
 	
-	//다중 동시로그인 오류 방지 쓰레딩
+	// 로그인SVC
 	private static class loginRunnable implements Runnable{
 		private BufferedReader id_br, pw_br = null;
 		private BufferedWriter info_bw = null;
 		private String id_tmp;
 		private String pw_tmp;
 		
-		loginRunnable(Socket idSocket, Socket pwSocket, Socket infoSocket){
+		public loginRunnable(Socket idSocket, Socket pwSocket, Socket infoSocket){
 			try {
 				id_br = new BufferedReader(new InputStreamReader(idSocket.getInputStream()));
 				pw_br = new BufferedReader(new InputStreamReader(pwSocket.getInputStream()));
@@ -166,6 +170,7 @@ public class main_server {
 				e.printStackTrace();
 			} 
 		}
+		
 		@Override
 		public void run() {
 			try {
@@ -173,14 +178,16 @@ public class main_server {
 					try {
 						id_tmp = id_br.readLine();
 						pw_tmp = pw_br.readLine();
-						//로그인 성공
+						
+						// 로그인 성공
 						if(login(id_tmp, pw_tmp)) {
 							String userInfo[] = findInfo(id_tmp);
 							info_bw.write(userInfo[0]+userInfo[1]+userInfo[2]+userInfo[3]+"\n");
 							info_bw.flush();
 							break;
-						}//로그인 실패
+						}
 						else {
+							// 로그인 실패
 							info_bw.write("-1@-1@-1@-1\n");
 							info_bw.flush();
 						}
